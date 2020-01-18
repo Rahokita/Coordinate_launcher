@@ -19,12 +19,13 @@ def on_closing():
         root.destroy()
 
 def folder_exchange(org_folder,bk_folder,rep_folder):
-    #既存のフォルダをremaneして退避
-    os.rename(org_folder, bk_folder)
-    #コピー先のフォルダを作成（フォルダ名は固定）
-    #os.mkdir(org_folder)
-    #フォルダの中身ごとコピー
-    shutil.copytree('Foo', org_folder)
+    if os.path.exists(rep_folder) == True:
+        #既存のフォルダをremaneして退避
+        os.rename(org_folder, bk_folder)
+        #コピー先のフォルダを作成（フォルダ名は固定）
+        #os.mkdir(org_folder)
+        #フォルダの中身ごとコピー
+        shutil.copytree(rep_folder, org_folder)
 
 def folder_reset(org_folder,bk_folder):
     #bk_dolderが存在するかをチェック
@@ -50,10 +51,18 @@ if __name__ == '__main__':
     cb['values']=('Foo', 'Bar', 'Baz')
     cb.set("Foo")
     cb.grid(row=0, column=0)
+
+    v2 = StringVar()
+    cb2 = ttk.Combobox(frame1, textvariable=v2)
+    cb2.bind('<<ComboboxSelected>>', cb_selected)
+    
+    cb2['values']=('Foo2', 'Bar2', 'Baz2')
+    cb2.set("Foo2")
+    cb2.grid(row=1, column=0)
     
     #Button
     button1 = ttk.Button(frame1, text='OK', command=button1_clicked)
-    button1.grid(row=0, column=1)
+    button1.grid(row=1, column=1)
     
     root.protocol("WM_DELETE_WINDOW", on_closing)
     root.mainloop()
